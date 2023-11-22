@@ -8,5 +8,4 @@ import controllers.hello
 import controllers.subject
 
 if __name__ == '__main__':
-
     app.run(debug=True)

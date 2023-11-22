@@ -3,7 +3,7 @@ from app import app
 from flask import render_template, request
 
 
-@app.route('/hello', methods=['GET'])
+@app.route('/hello', methods=['GET', 'POST'])
 def hello():
     name = ""
     gender = ""
@@ -18,14 +18,27 @@ def hello():
     subject_id = request.values.getlist('subject[]')
     subjects_select = [constants.subjects[int(i)] for i in subject_id]
 
-    return render_template(
-        'hello.html',
-        name=name,
-        gender=gender,
-        program=constants.programs[int(program_id)],
-        program_list=constants.programs,
-        len=len,
-        enumerate=enumerate,
-        subjects_select=subjects_select,
-        subject_list=constants.subjects
-    )
+    if request.method == "GET":
+        return render_template(
+            'hello.html',
+            name=name,
+            gender=gender,
+            program=constants.programs[int(program_id)],
+            program_list=constants.programs,
+            len=len,
+            enumerate=enumerate,
+            subjects_select=subjects_select,
+            subject_list=constants.subjects
+        )
+    else:
+        return render_template(
+            'hello_part.html',
+            name=name,
+            gender=gender,
+            program=constants.programs[int(program_id)],
+            program_list=constants.programs,
+            len=len,
+            enumerate=enumerate,
+            subjects_select=subjects_select,
+            subject_list=constants.subjects
+        )

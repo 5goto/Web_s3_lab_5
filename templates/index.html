@@ -3,12 +3,18 @@
  <head>
  <title> Приветствие </title>
  </head>
-<body>
- <form action="{{ url_for('hello') }}" method="get">
- <p>Имя: <input type = text name=username></p>
+<body style="width: 40%; margin: auto">
+ <form id="main-form" action="{{ url_for('hello') }}" method="get">
+ <div class="flex-div" style="display: flex; justify-content: space-between">
+ <p>Имя: <input id="name-field" type = text name=username></p>
+     <p>
+     <input id="page" type ="checkbox" name="same-page" value="true">
+         На той же странице
+     </p>
+ </div>
  <p>Пол:<br>
  <input type = radio name=gender value=w> Ж <br>
- <input type = radio name=gender value=m> M <br>
+ <input type = radio name=gender value=m checked> M <br>
      Образовательная программа:
      <select name=program>
      {% for i in range(len(program_list)) %}
@@ -24,7 +30,9 @@
  {% endfor %}
  </p>
 
- <p><input type=submit value=Отправить></p>
+     <p><input id="form-submit" type=submit value=Отправить> <input id="reset-btn" type="reset" value="Очистить"></p>
  </form>
+ <div id="second-part"></div>
+<script src="{{ url_for('static', filename = 'index.js')}}"></script>
 </body>
 </html>
