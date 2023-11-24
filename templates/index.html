@@ -4,35 +4,81 @@
  <title> Приветствие </title>
  </head>
 <body style="width: 40%; margin: auto">
- <form id="main-form" action="{{ url_for('hello') }}" method="get">
+ <form id="main-form" action="{{ url_for('index') }}" method="post">
  <div class="flex-div" style="display: flex; justify-content: space-between">
- <p>Имя: <input id="name-field" type = text name=username></p>
-     <p>
-     <input id="page" type ="checkbox" name="same-page" value="true">
-         На той же странице
-     </p>
+ <p>Имя: <input id="name-field" type = text name=username value={{ name }}></p>
+
  </div>
  <p>Пол:<br>
- <input type = radio name=gender value=w> Ж <br>
+
+  {% if gender == "w" %}
+ <input type = radio name=gender value=w checked> Ж <br>
+      <input type = radio name=gender value=m > M <br>
+ {% elif gender == "m" %}
+      <input type = radio name=gender value=w> Ж <br>
  <input type = radio name=gender value=m checked> M <br>
+ {% else %}
+      <input type = radio name=gender value=w> Ж <br>
+ <input type = radio name=gender value=m> M <br>
+  {% endif %}
      Образовательная программа:
      <select name=program>
      {% for i in range(len(program_list)) %}
-     <option value={{i}}>{{program_list[i]}}</option>
+         {% if program_list[i] == program %}
+     <option value={{i}} selected>{{program_list[i]}}</option>
+             {% else %}
+             <option value={{i}}>{{program_list[i]}}</option>
+           {% endif %}
      {% endfor %}
      </select>
  </p>
  <p>
  Выберите дисциплины, которые Вы изучаете:<br>
  {% for i in range(len(subject_list)) %}
- <input type = checkbox name=subject[] value={{i}}>
+     {% if subject_list[i] in subjects_select %}
+ <input type = checkbox name=subject[] value={{i}} checked>
  {{subject_list[i]}}<br>
+     {% else %}
+         <input type = checkbox name=subject[] value={{i}}>
+ {{subject_list[i]}}<br>
+     {% endif %}
  {% endfor %}
  </p>
 
      <p><input id="form-submit" type=submit value=Отправить> <input id="reset-btn" type="reset" value="Очистить"></p>
  </form>
- <div id="second-part"></div>
-<script src="{{ url_for('static', filename = 'index.js')}}"></script>
+{# <div id="second-part"></div>#}
+ {% if name == "" %}
+ <p>Введите имя, пожалуйста!</p>
+ {% elif name == "none" %}
+
+  {% else %}
+ <p>
+ Привет,
+ {% if gender == "m" %}
+ студент
+ {% elif gender == "w" %}
+ студентка
+ {% endif %}
+ {{name}}!
+ </p>
+    <p>
+     Ваша образовательная программа: {{program}}.
+     </p>
+     {% if len(subjects_select) == 0 %}
+         <p>Вы не изучаете никаких дисциплин</p>
+     {% else %}
+    <p>
+     Вы изучаете дисциплины:
+     {% for ind, sub in enumerate(subjects_select, start=1) %}
+         {% if ind == len(subjects_select) %}
+             <a href={{ url_for('subject', sub=sub) }}> {{sub}}</a>.
+         {% else %}
+            <a href={{ url_for('subject', sub=sub) }}> {{sub}}</a>,
+         {% endif %}
+     {% endfor %}
+     </p>
+          {% endif %}
+ {% endif %}
 </body>
 </html>
